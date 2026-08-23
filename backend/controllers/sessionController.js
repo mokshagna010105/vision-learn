@@ -271,6 +271,7 @@ const extractKeywordFromText = async (req, res) => {
         });
       }
     }
+    
 
     await logAPICall('/api/sessions/extract-keyword', startTime, `Manual keyword extraction for "${text.substring(0, 30)}..."`);
     res.json({ keywords: extracted, image: selectedImage });

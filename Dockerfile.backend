@@ -1,0 +1,17 @@
+# Build Stage for Backend
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy dependency configs
+COPY backend/package*.json ./
+
+# Install production dependencies
+RUN npm ci --only=production
+
+# Copy application code
+COPY backend/ ./
+
+EXPOSE 5000
+
+CMD ["node", "server.js"]

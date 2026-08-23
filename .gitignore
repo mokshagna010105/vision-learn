@@ -1,0 +1,105 @@
+# =========================
+# Environment variables
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Node.js dependencies
+# =========================
+node_modules/
+**/node_modules/
+
+# =========================
+# Build / distribution files
+# =========================
+dist/
+build/
+coverage/
+**/dist/
+**/build/
+**/coverage/
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# Runtime / temporary files
+# =========================
+*.tmp
+*.temp
+tmp/
+temp/
+
+# =========================
+# OS generated files
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# IDE / Editor files
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+# =========================
+# Testing
+# =========================
+.nyc_output/
+*.test.log
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+
+# =========================
+# Generated uploads / media
+# =========================
+uploads/
+backend/uploads/
+frontend/uploads/
+
+# =========================
+# Generated audio / image files
+# =========================
+*.wav
+*.mp3
+*.webm
+*.ogg
+*.mp4
+*.mov
+
+# =========================
+# Generated AI/model/cache files
+# =========================
+.cache/
+*.cache
+__pycache__/
+
+# =========================
+# Local database files
+# =========================
+*.sqlite
+*.sqlite3
+*.db
+
+# =========================
+# Backup files
+# =========================
+*.bak
+*.backup
+*~

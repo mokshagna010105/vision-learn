@@ -10,6 +10,7 @@ const ClassroomDisplay = () => {
   const [classroom, setClassroom] = useState(searchParams.get('classroom') || 'Classroom A');
   const [isClassroomSelected, setIsClassroomSelected] = useState(!!searchParams.get('classroom'));
 
+  
   // Classroom Live State
   const [activeSession, setActiveSession] = useState(null);
   const [currentImage, setCurrentImage] = useState(null);

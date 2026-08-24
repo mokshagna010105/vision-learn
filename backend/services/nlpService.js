@@ -96,7 +96,6 @@ const extractKeywords = (text) => {
     });
   });
 };
-
 module.exports = {
   extractKeywords
 };

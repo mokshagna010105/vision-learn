@@ -118,12 +118,11 @@ export const useSpeechToText = (sessionId, mode = 'webspeech') => {
 
         recorder.onstop = async () => {
           if (audioChunksRef.current.length === 0) return;
-
+          
           const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
           const formData = new FormData();
           formData.append('audio', audioBlob, 'speech.webm');
           formData.append('sessionId', sessionId);
-
           try {
             console.log('Uploading audio chunk for Whisper transcription...');
             const res = await api.uploadSpeech(formData);

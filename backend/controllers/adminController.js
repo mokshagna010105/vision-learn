@@ -4,6 +4,7 @@ const Keyword = require('../models/Keyword');
 const Image = require('../models/Image');
 const Log = require('../models/Log');
 
+
 /**
  * @desc    Get all teachers
  * @route   GET /api/teachers

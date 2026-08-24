@@ -8,6 +8,7 @@ const {
 } = require('../controllers/adminController');
 const { protect, adminProtect } = require('../middleware/authMiddleware');
 
+
 const router = express.Router();
 
 router.route('/teachers')

@@ -9,6 +9,8 @@ const generateToken = (id) => {
   });
 };
 
+
+
 /**
  * @desc    Authenticate teacher or admin & get token
  * @route   POST /api/auth/login

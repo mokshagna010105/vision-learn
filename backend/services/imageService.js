@@ -210,6 +210,7 @@ const getEducationalImage = async (keyword) => {
     }
   }
 
+  
   // Cache and return
   imageCache.set(cacheKey, foundImage);
   return foundImage;

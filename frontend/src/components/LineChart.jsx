@@ -30,6 +30,8 @@ const LineChart = ({ data = [], title = '', height = 200 }) => {
     return { x, y, label: d.label, value: d.value };
   });
 
+
+  
   // Construct path string
   let pathD = '';
   let areaD = '';

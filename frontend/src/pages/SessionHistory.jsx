@@ -343,6 +343,9 @@ const SessionHistory = () => {
               </button>
             </div>
 
+
+
+            
             {/* Meta Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-850 text-left text-xs">
               <div className="flex flex-col gap-0.5">

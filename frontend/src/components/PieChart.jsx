@@ -20,6 +20,8 @@ const PieChart = ({ data = [], title = '' }) => {
   const center = size / 2;
   const circumference = 2 * Math.PI * radius;
 
+
+  
   // Custom Colors
   const colors = [
     '#2563EB', // blue

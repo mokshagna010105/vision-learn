@@ -50,6 +50,8 @@ const startSession = async (req, res) => {
     return res.status(400).json({ message: 'Subject and Classroom are required' });
   }
 
+
+  
   try {
     // End any active sessions in this classroom first
     await Session.updateMany({ classroom, isActive: true }, { isActive: false, endTime: Date.now() });

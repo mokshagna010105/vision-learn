@@ -98,6 +98,9 @@ const BarChart = ({ data = [], title = '', height = 200 }) => {
               transform: 'translateX(-50%)',
             }}
           >
+
+
+            
             <div className="text-[8px] text-slate-400 dark:text-slate-400 font-bold uppercase">{bars[hoveredIdx].label}</div>
             <div className="text-accent-300">{bars[hoveredIdx].value}</div>
           </div>

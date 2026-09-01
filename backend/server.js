@@ -5,6 +5,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 // Load configurations
 dotenv.config();

@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        PATH = "/opt/nodejs/bin:${env.PATH}"
+    }
+
     stages {
 
         stage('Checkout') {
@@ -15,6 +19,11 @@ pipeline {
                 echo 'Building and validating VisionLearn frontend...'
 
                 sh '''
+                    echo "Node version:"
+                    node -v
+                    echo "NPM version:"
+                    npm -v
+
                     cd frontend
                     npm ci
                     npm run build
@@ -27,6 +36,7 @@ pipeline {
                 echo 'Validating VisionLearn backend JavaScript...'
 
                 sh '''
+                    node -v
                     node --check backend/server.js
                 '''
             }

@@ -178,6 +178,45 @@ pipeline {
                 '''
             }
         }
+        
+        stage('Push Images to Docker Hub') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-visionlearn',
+                        usernameVariable: 'DOCKERHUB_USER',
+                        passwordVariable: 'DOCKERHUB_TOKEN'
+                    )
+                ]) {
+                    sh '''
+                        set -eu
+        
+                        BACKEND_LOCAL="visionlearn-backend:build-${BUILD_NUMBER}"
+                        FRONTEND_LOCAL="visionlearn-frontend:build-${BUILD_NUMBER}"
+        
+                        BACKEND_REMOTE="${DOCKERHUB_USER}/visionlearn-backend:build-${BUILD_NUMBER}"
+                        FRONTEND_REMOTE="${DOCKERHUB_USER}/visionlearn-frontend:build-${BUILD_NUMBER}"
+        
+                        echo "$DOCKERHUB_TOKEN" | docker login \
+                            --username "$DOCKERHUB_USER" \
+                            --password-stdin
+        
+                        docker tag "$BACKEND_LOCAL" "$BACKEND_REMOTE"
+                        docker tag "$FRONTEND_LOCAL" "$FRONTEND_REMOTE"
+        
+                        docker push "$BACKEND_REMOTE"
+                        docker push "$FRONTEND_REMOTE"
+        
+                        docker logout
+        
+                        echo "Successfully pushed:"
+                        echo "$BACKEND_REMOTE"
+                        echo "$FRONTEND_REMOTE"
+                    '''
+                }
+            }
+        }
+
     }
 
     post {

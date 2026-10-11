@@ -285,7 +285,7 @@ pipeline {
                         BACKEND_OK=0
                         for i in $(seq 1 20); do
                             if docker exec visionlearn-backend node -e \
-                                "fetch('/api').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+                                "fetch('http://localhost:5000').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
                             then
                                 BACKEND_OK=1
                                 break

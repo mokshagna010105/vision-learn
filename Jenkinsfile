@@ -216,6 +216,110 @@ pipeline {
                 }
             }
         }
+        
+        stage('Deploy to EC2') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-visionlearn',
+                        usernameVariable: 'DOCKERHUB_USER',
+                        passwordVariable: 'DOCKERHUB_TOKEN'
+                    ),
+                    string(
+                        credentialsId: 'visionlearn-jwt-secret',
+                        variable: 'JWT_SECRET'
+                    )
+                ]) {
+                    sh '''
+                        set -eu
+
+                        BACKEND_IMAGE="${DOCKERHUB_USER}/visionlearn-backend:build-${BUILD_NUMBER}"
+                        FRONTEND_IMAGE="${DOCKERHUB_USER}/visionlearn-frontend:build-${BUILD_NUMBER}"
+
+                        echo "Preparing deployment network and storage..."
+                        docker network inspect visionlearn-net >/dev/null 2>&1 || \
+                            docker network create visionlearn-net
+                        docker volume inspect visionlearn-mongo-data >/dev/null 2>&1 || \
+                            docker volume create visionlearn-mongo-data
+
+                        echo "Ensuring MongoDB is running..."
+                        if docker container inspect visionlearn-db >/dev/null 2>&1; then
+                            docker start visionlearn-db >/dev/null 2>&1 || true
+                            docker network connect visionlearn-net visionlearn-db >/dev/null 2>&1 || true
+                        else
+                            docker run -d \
+                                --name visionlearn-db \
+                                --network visionlearn-net \
+                                --network-alias db \
+                                --restart unless-stopped \
+                                -v visionlearn-mongo-data:/data/db \
+                                mongo:6.0
+                        fi
+
+                        echo "Pulling images for build ${BUILD_NUMBER}..."
+                        docker pull "$BACKEND_IMAGE"
+                        docker pull "$FRONTEND_IMAGE"
+
+                        echo "Replacing application containers..."
+                        docker rm -f visionlearn-frontend visionlearn-backend >/dev/null 2>&1 || true
+
+                        docker run -d \
+                            --name visionlearn-backend \
+                            --network visionlearn-net \
+                            --network-alias backend \
+                            --restart unless-stopped \
+                            -e PORT=5000 \
+                            -e MONGODB_URI=mongodb://db:27017/visionlearn \
+                            -e NODE_ENV=production \
+                            -e JWT_SECRET="$JWT_SECRET" \
+                            "$BACKEND_IMAGE"
+
+                        docker run -d \
+                            --name visionlearn-frontend \
+                            --network visionlearn-net \
+                            --restart unless-stopped \
+                            -p 3000:80 \
+                            "$FRONTEND_IMAGE"
+
+                        echo "Waiting for backend readiness..."
+                        BACKEND_OK=0
+                        for i in $(seq 1 20); do
+                            if docker exec visionlearn-backend node -e \
+                                "fetch('http://localhost:5000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+                            then
+                                BACKEND_OK=1
+                                break
+                            fi
+                            sleep 3
+                        done
+                        test "$BACKEND_OK" -eq 1
+
+                        echo "Waiting for frontend readiness..."
+                        FRONTEND_OK=0
+                        for i in $(seq 1 20); do
+                            CODE=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/ || true)
+                            if [ "$CODE" = "200" ]; then
+                                FRONTEND_OK=1
+                                break
+                            fi
+                            sleep 3
+                        done
+                        test "$FRONTEND_OK" -eq 1
+
+                        echo "Checking API proxy through Nginx..."
+                        API_CODE=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/api/profile || true)
+                        test "$API_CODE" = "401"
+
+                        echo "Deployment verified successfully."
+                        echo "Backend image: $BACKEND_IMAGE"
+                        echo "Frontend image: $FRONTEND_IMAGE"
+                        echo "Frontend URL: http://$(hostname -I | awk '{print $1}'):3000"
+                        docker ps --filter name=visionlearn
+                    '''
+                }
+            }
+        }
+
 
     }
 

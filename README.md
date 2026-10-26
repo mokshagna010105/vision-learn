@@ -3,7 +3,6 @@
 VisionLearn is a production-ready, full-stack AI web application designed to assist primary school teachers. It continuously listens to a teacher's voice in real-time, converts the speech to text, extracts key educational concepts using Natural Language Processing (NLP), retrieves or generates relevant illustrations, and instantly displays them on a separate classroom screen for students.
 
 The goal is to help primary school students better understand abstract or unfamiliar concepts through real-time visual learning without interrupting the teaching process.
-
 ---
 
 ## 🚀 Key Features
@@ -26,9 +25,7 @@ The goal is to help primary school students better understand abstract or unfami
 * **Authentication:** JWT, bcryptjs Password Hashing
 * **AI Services:** OpenAI Whisper API, OpenAI DALL-E API, compromise NLP, Pixabay API, Unsplash API, Google Custom Search API
 * **DevOps:** Docker, Docker Compose
-
 ---
-
 ## 📁 Folder Structure
 
 ```
@@ -182,19 +179,17 @@ All API endpoints are prefixed with `/api`. Protected routes require a `Bearer <
 * `POST /stop-session` - Stops listening session, computes elapsed time.
 * `POST /speech` - Accepts continuous audio file chunks (via Multer), transcribes via Whisper, runs NLP, triggers image searches, and broadcasts updates.
 * `POST /extract-keyword` - Receives raw text, parses keywords, gets images, updates DB, and broadcasts (used for WebSpeech native API route).
-
 ### 🎨 Visual overrides & Fallbacks
 * `GET /image` - Run search queries across Unsplash/Pixabay/Google APIs.
 * `POST /generate-image` - Explicitly trigger OpenAI DALL-E image generation for a keyword.
 * `POST /override-image` - Manually override the current visual display with a custom image URL.
 * `DELETE /remove-image` - Force clear the active displayed card on the classroom screen.
-
 ### 📊 History & Analytics
 * `GET /history` - Fetch classroom sessions, keywords, and images with support for filters.
 * `GET /analytics` - Get aggregated metrics including top keywords, daily counts, API usage ratios, and IT system health markers.
 * `GET /logs` - Retrieve detailed system event logs for IT support diagnostics.
-
 ### 👥 Teacher Management
 * `GET /teachers` - Get list of active school teachers.
 * `POST /teachers` - Create new teacher account.
 * `DELETE /teachers/:id` - Delete teacher account.
+Update commit record 
